@@ -20,7 +20,7 @@ public class SimpleBIODemoClient {
     public static void main(String[] args) throws IOException{
       Socket socket = new Socket("127.0.0.1",2101);
       PrintWriter out =  new PrintWriter(socket.getOutputStream(),true);
-      BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+      BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()),3);
       out.println("hello socket!");
       String str = in.readLine();
       System.out.println(str);
