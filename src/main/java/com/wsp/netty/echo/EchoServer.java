@@ -23,11 +23,15 @@ public class EchoServer {
 
     }
 
+    /**
+     * 启动echo服务器
+     * @throws Exception
+     */
     public void start() throws Exception {
         final EchoServerHandler serverHandler = new EchoServerHandler();
         EventLoopGroup loopGroup = new NioEventLoopGroup();//创建eventLoopGroup
         try {
-            ServerBootstrap bootstrap = new ServerBootstrap();//创建ServerBootStrap
+            ServerBootstrap bootstrap = new ServerBootstrap();//创建ServerBootStrap,netty服务端类
             bootstrap.group(loopGroup)
                     .channel(NioServerSocketChannel.class) //指定使用NioServerSocketChannel传输Channel
                     .localAddress(new InetSocketAddress(port)) //监听本机指定端口
