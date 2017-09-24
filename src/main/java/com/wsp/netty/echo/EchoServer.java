@@ -47,4 +47,9 @@ public class EchoServer {
             loopGroup.shutdownGracefully().sync();
         }
     }
+
+    public static void main(String[] args)throws Exception {
+        EchoServer es = new EchoServer();
+        es.start();
+    }
 }

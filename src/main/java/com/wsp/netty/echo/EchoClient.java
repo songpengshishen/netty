@@ -17,7 +17,7 @@ import java.net.InetSocketAddress;
  */
 public class EchoClient {
     private final String host = "127.0.0.1";
-    private final int port = 2101;
+    private final int port = 2001;
 
     /**
      * echo客户端连接echo服务器
@@ -41,5 +41,10 @@ public class EchoClient {
         }finally {
                 group.shutdownGracefully().sync();
         }
+    }
+
+    public static void main(String[] args) throws Exception {
+        EchoClient ec = new EchoClient();
+        ec.connection();
     }
 }
