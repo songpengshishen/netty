@@ -1,10 +1,13 @@
 package com.wsp.netty.reactor;
 
 /**
+ * 事件接受者,处理IO连接的Accept
  * @author wsp
  * @since 2018/01/09
  */
-public class Acceptor implements Runnable{
+public abstract class Acceptor implements Runnable{
+
+
 
 
 
