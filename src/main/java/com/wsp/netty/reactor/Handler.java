@@ -11,7 +11,7 @@ import java.nio.channels.SocketChannel;
  * @author wsp
  * @since 2018/01/11
  */
-public class Handler implements Runnable{
+public class Handler implements Invoke{
 
     final SocketChannel socketChannel;
     final SelectionKey sk;
@@ -25,23 +25,12 @@ public class Handler implements Runnable{
         socketChannel.configureBlocking(false);
         sk = socketChannel.register(sel,SelectionKey.OP_READ);//注册socket管道读事件到Selector上
         sk.attach(this);
-        sk.interestOps(SelectionKey.OP_READ);
         sel.wakeup();
     }
 
-    /**
-     * When an object implementing interface <code>Runnable</code> is used
-     * to create a thread, starting the thread causes the object's
-     * <code>run</code> method to be called in that separately executing
-     * thread.
-     * <p>
-     * The general contract of the method <code>run</code> is that it may
-     * take any action whatsoever.
-     *
-     * @see Thread#run()
-     */
+
     @Override
-    public void run() {
+    public void invoke() {
         try {
             if (state == READING) read();
             else if (state == SENDING) send();
@@ -49,19 +38,27 @@ public class Handler implements Runnable{
     }
 
     void read() throws IOException {
-        socketChannel.read(input);
-        process();
-        state = SENDING;
-        sk.interestOps(SelectionKey.OP_WRITE);
+        int count =  socketChannel.read(input);
+        if(count > 0){
+            process();
+            state = SENDING;
+            sk.interestOps(SelectionKey.OP_WRITE);
+        }
     }
 
     void send() throws IOException {
-        socketChannel.write(output);
+        System.out.println("发送成功!");
         sk.cancel();
     }
 
-    public void process(){
-
+    public void process()throws IOException{
+        this.input.flip();
+        byte[] b1 = new byte[this.input.limit()];
+        this.input.get(b1);
+        System.out.println(new String(b1));
+        output.put(new String("hello Wsp!").getBytes());
+        output.flip();
+        socketChannel.write(output);
     }
 
 }

@@ -47,8 +47,8 @@ public class Reactor extends Thread{
 
     public Reactor(int port,boolean isMainReactor,boolean useMultipleReactors,long timeOut,ServerSocketChannel serverChannel)throws Exception{
         this.port = port;
-        this.isMainReactor = isMainReactor;
-        this.useMultipleReactors = useMultipleReactors;
+        this.isMainReactor = true;
+        this.useMultipleReactors = false;
         this.timeOut = timeOut;
         this.serverSocketChannel = serverChannel;
         init();
@@ -94,7 +94,13 @@ public class Reactor extends Thread{
 
 
     void dispatch(SelectionKey key){
-        Runnable r =  (Runnable)key.attachment();
-        r.run();
+        Invoke invoke =  (Invoke)key.attachment();
+        invoke.invoke();
+    }
+
+
+    public static void main(String[] args)throws Exception {
+        Thread reactor = new Reactor(ServerSocketChannel.open(),2001);
+        reactor.start();
     }
 }

@@ -1,5 +1,8 @@
 package com.wsp.netty.reactor;
 
+import java.net.InetSocketAddress;
+import java.net.Socket;
+import java.nio.ByteBuffer;
 import java.nio.channels.Selector;
 import java.nio.channels.ServerSocketChannel;
 import java.nio.channels.SocketChannel;
@@ -9,7 +12,7 @@ import java.nio.channels.SocketChannel;
  * @author wsp
  * @since 2018/01/09
  */
-public class Acceptor implements Runnable{
+public class Acceptor implements Invoke{
 
 
 
@@ -21,26 +24,35 @@ public class Acceptor implements Runnable{
         this.serverChannel = serverChannel;
     }
 
-    /**
-     * When an object implementing interface <code>Runnable</code> is used
-     * to create a thread, starting the thread causes the object's
-     * <code>run</code> method to be called in that separately executing
-     * thread.
-     * <p>
-     * The general contract of the method <code>run</code> is that it may
-     * take any action whatsoever.
-     *
-     * @see Thread#run()
-     */
     @Override
-    public void run() {
+    public void invoke() {
         try {
             SocketChannel clientChannel = serverChannel.accept();
             if(null != clientChannel){
-
+                System.out.println("连接成功!");
+                new Handler(selector,clientChannel);
             }
         }catch (Exception e){
             e.printStackTrace();
         }
+    }
+
+    public static void main(String[] args) throws  Exception{
+        SocketChannel socketChannel =    SocketChannel.open();
+        socketChannel.socket().connect(new InetSocketAddress(2001));
+        ByteBuffer buffer =   ByteBuffer.allocate(100);
+        buffer.clear();
+        String str = new String("Hello Netty!");
+        buffer.put(str.getBytes());
+        buffer.flip();
+        while (buffer.hasRemaining()){
+            socketChannel.write(buffer);
+        }
+        buffer.clear();
+        socketChannel.read(buffer);
+        buffer.flip();
+        byte[] b1 = new byte[buffer.limit()];
+        buffer.get(b1);
+        System.out.println(new String(b1));
     }
 }
