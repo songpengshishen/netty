@@ -1,6 +1,4 @@
 package com.wsp.netty.reactor;
-
-import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.nio.channels.SelectionKey;
 import java.nio.channels.Selector;
@@ -20,7 +18,7 @@ import java.util.Set;
  * @author wsp
  * @since 2018/01/09
  */
-public abstract class Reactor extends Thread{
+public class Reactor extends Thread{
 
     /**
      * java Nio核心类,通过封装操作系统IO多路复用模型的select epoll poll系统调用来实现监听多个Io连接的多种操作.需要将IO连接(管道)的操作注册上.
@@ -65,12 +63,11 @@ public abstract class Reactor extends Thread{
             serverSocketChannel.socket().bind(new InetSocketAddress(port));
             serverSocketChannel.configureBlocking(false);
             SelectionKey key = serverSocketChannel.register(selector, SelectionKey.OP_ACCEPT);
-            key.attach(newAcceptor(selector));
+            key.attach(new Acceptor(selector,serverSocketChannel));
         }
     }
 
 
-    public abstract Acceptor newAcceptor(Selector selector);
 
 
 
