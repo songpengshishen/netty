@@ -12,7 +12,7 @@ import java.util.Iterator;
 import java.util.Set;
 
 /**
- * 基于原生 JDK NIO API的Server
+ * 基于原生 JDK NIO API的Server,没有线程池概念无法并行执行
  * @author wsp
  */
 public class JdkNioServer {
