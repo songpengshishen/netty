@@ -43,7 +43,8 @@ public class Reactor implements Runnable{
                 Set<SelectionKey> set = selector.selectedKeys();
                 Iterator<SelectionKey> iterator = set.iterator();
                 while(iterator.hasNext()){
-                    dispatch(iterator.next());
+                    SelectionKey key =  iterator.next();
+                    dispatch(key);
                 }
                 set.clear();
             }
@@ -61,5 +62,9 @@ public class Reactor implements Runnable{
         Runnable runnable = (Runnable) k.attachment();//这里可能是Acceptor也可能是ReadWriteHandler
         if(runnable != null)
             runnable.run();
+    }
+
+    public static void main(String[] args)throws Exception {
+        new Reactor(8000).run();
     }
 }

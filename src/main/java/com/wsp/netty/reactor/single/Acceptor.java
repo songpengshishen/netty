@@ -29,7 +29,7 @@ public class Acceptor implements Runnable {
             SocketChannel c = serverSocketChannel.accept();//接收请求
             if (c != null) {
                 System.out.println("New Connection ... " + c.getRemoteAddress());
-               new ReadWriteHandler(selector, c);
+                new ReadWriteHandler(selector, c);
             }
         } catch (IOException e) {
             e.printStackTrace();
