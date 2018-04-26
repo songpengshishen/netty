@@ -65,9 +65,8 @@ public class ReadWriteHandler implements Runnable {
         ch.write(output);
         if(outputIsComplete()){
             key.cancel();
+            key.channel().close();
         }
-        state = READING;
-        key.interestOps(SelectionKey.OP_READ);
     }
 
     void process(){

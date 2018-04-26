@@ -26,10 +26,10 @@ public class Acceptor implements Runnable {
 
     public void run() {
         try {
-            SocketChannel c = serverSocketChannel.accept();//接收请求
-            if (c != null) {
-                System.out.println("New Connection ... " + c.getRemoteAddress());
-                new ReadWriteHandler(selector, c);
+            SocketChannel ch = serverSocketChannel.accept();//接收请求
+            if (ch != null) {
+                System.out.println("New Connection ... " + ch.getRemoteAddress());
+                new ReadWriteHandler(selector, ch);
             }
         } catch (IOException e) {
             e.printStackTrace();

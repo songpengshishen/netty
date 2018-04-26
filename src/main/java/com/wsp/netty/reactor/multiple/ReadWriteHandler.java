@@ -26,6 +26,7 @@ public class ReadWriteHandler implements Runnable {
     public ReadWriteHandler(Selector selector, SocketChannel ch) throws IOException {
         this.ch = ch;
         this.selector = selector;
+        ch.configureBlocking(false);
         key = ch.register(selector, 0);
         key.attach(this);
         key.interestOps(SelectionKey.OP_READ);
@@ -57,9 +58,8 @@ public class ReadWriteHandler implements Runnable {
         ch.write(output);
         if(outputIsComplete()){
             key.cancel();
+            key.channel().close();
         }
-        state = READING;
-        key.interestOps(SelectionKey.OP_READ);
     }
     void process(){
         //读数据

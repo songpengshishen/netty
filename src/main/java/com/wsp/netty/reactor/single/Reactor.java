@@ -44,9 +44,10 @@ public class Reactor implements Runnable{
                 Iterator<SelectionKey> iterator = set.iterator();
                 while(iterator.hasNext()){
                     SelectionKey key =  iterator.next();
+                    System.out.println(key.interestOps());
                     dispatch(key);
+                    iterator.remove();
                 }
-                set.clear();
             }
         }catch(Exception e){
             e.printStackTrace();
